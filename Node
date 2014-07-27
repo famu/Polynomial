@@ -1,0 +1,35 @@
+/**
+ * 
+ * Node class: maintains the linked list implementation
+ * 
+ */
+public class Node {
+	private int element; 
+	private Node next;
+	
+	/*Constructor with no argument */
+	public Node() { this(0,null);} //default value has to be zero because integer cannot be equal to null;
+	
+	/*Constructor with two arguments */
+	public Node(int e, Node n){ // 
+		element = e;
+		next = n;
+	}
+	
+	
+	void setElement(int newElement){  //sets the a new value to given node.
+		element = newElement;
+	}
+	
+	void setNext(Node newNext){   //makes current node to point given or new node.
+		next=newNext;
+	}
+	
+	int getElement(){  //returns the value of current node.
+		return element;
+	}
+	Node getNext(){  //returns the next node pointed by current node.
+		return next;
+	}
+	
+}
