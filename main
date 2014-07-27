@@ -1,0 +1,84 @@
+
+/**
+ * @author      Muhammad Faisal 
+ * main.java to calculated sum and product of pairs of polynomial read from given text file.
+ */
+import java.util.*; 
+import java.io.*;
+
+
+public class Project1 extends Polynomial {
+
+	/**
+	 * @function main 
+	 * @param arg[0] as name of the text file at the root directory of the project.
+	 */
+	public static void main(String[] args) {
+		/*Declarations of polynomials*/
+		Polynomial P1 = new Polynomial();
+		Polynomial P2 = new Polynomial();
+		Polynomial result;
+		
+		StringTokenizer tokens;   //To split numbers read from given string
+		
+		if(args.length == 0) System.out.println("No file specified.");  //At least one argument should be passed via command line.
+		else{
+			FileReader theFile;   //initialization is not done here because it is going to be in try block to deal with exception.
+			BufferedReader inFile;// Buffer reader is also declared only so it could be initialized in try block.
+			String oneLine;  //To store single line read from file
+			
+			try{
+				theFile = new FileReader(args[0]);   // Provided test data file as an only argument.
+				inFile = new BufferedReader(theFile); // Buffer is created to read the provided text file.
+				
+				oneLine = inFile.readLine();  //reads first line from the file.
+				while(oneLine !=null){  //terminates when line has no character.
+					tokens = new StringTokenizer (oneLine, " "); //String is splitted into tokens.
+					while(tokens.hasMoreTokens()){ //Traversing each token to get integer value.
+						P1.addCoefficient(Integer.parseInt(tokens.nextToken())); //Because tokens are of type string so they have to be taype cast into integers before adding them to the polynomial
+						}
+					P1.display(); System.out.println(); //Displaying first polynomial
+					
+					oneLine = inFile.readLine(); //Next line of the file is stored in 'oneLine'.
+					tokens = new StringTokenizer (oneLine, " ");// Because oneLine is of type String.
+					
+					while(tokens.hasMoreTokens()){//Traversing each token to get integer value.
+						P2.addCoefficient(Integer.parseInt(tokens.nextToken())); //2nd Polynomial gets its integer coefficients one by one.
+						}
+					
+					P2.display(); System.out.println(); //Displaying 2nd polynomial
+					
+										
+					result = sum(P1,P2); // summing up 1st and 2nd polynomial coefficients
+					System.out.print("sum = "); // Formating output for sum.
+					result.display(); System.out.println(); //Displaying calculated sum of given polynomials.
+					
+					result = product(P1,P2); // Calculating the product of given polynomials.
+					System.out.print("product = ");//Formating output for product
+					result.display();//Displaying resultant product.
+					
+					
+					
+					
+					//Both polynomial variables has to be reinitialized in order to store new polynomial coefficients
+					P1 = new Polynomial(); 
+					P2 = new Polynomial();
+					
+					//Since there is a pattern of blank lines in the given input file.
+					oneLine = inFile.readLine(); //current line is blanked 
+					oneLine = inFile.readLine(); //To avoid the blank line and getting next input line from given input file. 
+					
+					System.out.println(); //For keeping distance between the next polynomial pair result.
+					System.out.println();
+					System.out.println();
+
+				}
+			}
+			catch (Exception e) {System.out.println(e);}
+		}		
+		
+		
+
+	}
+
+}
