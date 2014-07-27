@@ -1,0 +1,136 @@
+	/**
+	 * Class Polynomial: Creates linked list defined by Node class and contains static functions to calculate
+	 * the sum and product of given polynomials
+	 */
+public class Polynomial {
+
+	public Node firstNode; //a reference to the first node
+	public Node lastNode = null; //a reference to the last node
+
+	/*Constructors*/	
+
+	Polynomial(){  //for object with null value because lastNode = null;
+		firstNode = null;
+	}
+	
+	Polynomial(Node n){  //For an initialized object with a new node 'n'
+		firstNode = n;
+	}
+	
+	
+	/**
+	 * @function display: shows the values of current list on the console.
+	 * 
+	 */
+	
+	public void display() //displays all the data in the nodes
+	{	Node n = firstNode;
+		while(n!=null) //to check if current node is null or move on
+			{	System.out.print(n.getElement()+", ");
+				n=n.getNext();	//move to the next node in the list
+			}
+	}
+	/**
+	 * @function addCoefficients appends or creates a new coefficient at the end of the current polynomial.
+	 * @param d holds the value of new coefficient that we want to add.
+	 */
+	public void addCoefficient(int d)  
+	{	
+		Node n=new Node(d,null); //creating new node 'n' initializing with given integers value 'd'
+	if(lastNode != null) //Because a null lastNode means an empty linked list.
+	{	
+		lastNode.setNext(n);lastNode=n;} //Since list is not empty, last node should point then next node.
+	else //In case the list is empty.
+	{	
+		firstNode=n;lastNode=n;}	//First 'n' becomes the first node.
+	}
+	
+	/**
+	 * @function sum: calculates the sum of exactly two polynomials
+	 * @param P1 holds the coefficients of first polynomial
+	 * @param P2 holds the coefficients of 2nd polynomial
+	 * @returns result of type polynomial containing the coefficients of resultant polynomial
+	 */
+	public static Polynomial sum(Polynomial P1,Polynomial P2){
+		Node n1 = P1.firstNode;
+		Node n2 = P2.firstNode;
+		
+		Polynomial result = new Polynomial();
+		
+		while(n1!=null && n2!=null){//if one of the polynomial has less coefficients than the other loop terminates.
+			//System.out.println(n1.getValue() + " , " + n2.getValue());  //for debug purpose
+			
+			result.addCoefficient(n1.getElement() + n2.getElement());  //adding like term coefficients.
+			n1=n1.getNext();	//moving to the next nodes in the list
+			n2=n2.getNext();
+			}
+		if(n1!=null){ //Means n1 has more coefficients.
+			while(n1!=null){ //for accessing rest of the coefficients.
+				result.addCoefficient(n1.getElement());
+				n1=n1.getNext();	//move to the next node in the list
+			}
+		}
+		else{   //Means n2 or 2nd polynomial has more coefficients than the n1 or first polynomial
+			while(n2!=null){  //
+				result.addCoefficient(n2.getElement());
+				n2=n2.getNext();	//move to the next node in the list
+			}
+		}
+		
+		return result;  //returns the sum of P1 and P2
+	}
+	
+	/**
+	 * @function product calculates the product of exactly two polynomials
+	 * @param P1 holds the coefficients of first polynomial
+	 * @param P2 holds the coefficients of 2nd polynomial
+	 * @returns result of type polynomial containing the coefficients of resultant polynomial
+	 */
+public static Polynomial product(Polynomial P1,Polynomial P2){
+		/*Initializing two nodes with the first nodes of P1,P2*/
+		Node n1 = P1.firstNode;
+		Node n2 = P2.firstNode;
+		
+		Polynomial result = new Polynomial(); //Result holds the resultant or final value to be returned.
+		Polynomial temp = new Polynomial();   //temp holds the temporary results or intermediate summations.
+		
+		Node n;  //to hold 2nd node of temp because addition starts from the 2nd node of every intermediate result.
+		Polynomial p = new Polynomial(); // directly, node 'n' is not acceptable as parameter by the sum() therefore 'p' need for that.
+		
+		
+		while(n1!=null){ //to traverse each coefficient of P1
+			
+			while(n2!=null){  //to traverse each coefficient of P2
+								/*1st coefficient is multiplied by each coefficient of 2nd polynomial*/
+				temp.addCoefficient(n1.getElement() * n2.getElement());  
+				n2 = n2.getNext();  // current node moves forward to get new coefficient of P2
+			}
+						/*In first iteration, p is null so intermediate sum is same as temp, but later on p gets
+						 * the position of 2nd node of previous temp. It is because addition starts from
+						 * the 2nd position of previous intermediate result.*/					
+			temp = sum(p,temp); 
+											/*the first element of temp is the first coefficient of final product*/
+			result.addCoefficient(temp.firstNode.getElement()); 
+			
+			n = temp.firstNode.getNext();  //'n' stores the position of 2nd node of temp because addition starts from here.
+			p = new Polynomial(n); //since sum() accepts polynomial rather than node, therefore 'p' is initialized with 'n'
+			
+			temp = new Polynomial(); //temp is reinitialized and ready to hold next intermediate summation.
+			
+			n1 = n1.getNext(); //moving n1 to next node to get next coefficient
+			n2 = P2.firstNode; //because all coefficients of 2nd polynomial have to be multiplied again from start to end.
+			
+		}//end outer loop
+		
+		/*Since 'result' adds one value in one outer iteration therefore some values left to be stored in 'result'.  */
+		
+		n = p.firstNode;  //'p' is initialized with 'n' because 'p' points the remaining values to be stored in 'result'.
+		
+		while(n!=null){
+			result.addCoefficient(n.getElement());  //storing rest of the values in result one by one.
+			n = n.getNext();
+		}
+		
+		return result;  //returning final result containing the product of P1 and P2
+	}
+}
